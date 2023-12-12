@@ -77,6 +77,7 @@ import HomeLogin from '@/components/top/HomeLogin.vue'
 import store from '@/store'
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Top',
   computed: {
     store() {
@@ -112,7 +113,9 @@ export default {
     isLogin() {
       this.axios.post('/user/isLogin')
         .then((res) => {
-          this.$store.commit('updateUser', res.data.data)
+          if(res.data.success!==false){
+            this.$store.commit('updateUser', res.data.data)
+          }
         })
     },
     //   退出

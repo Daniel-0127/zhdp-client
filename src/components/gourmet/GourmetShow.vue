@@ -5,16 +5,26 @@
       <p>最新点评， 对比低价。</p>
       <input type="search" placeholder="美食或者店铺名">
     </div>
+    <GourmetRecommend v-show="store.state.user!==''"></GourmetRecommend>
     <GourmetList></GourmetList>
+
   </div>
 </template>
 
 <script>
 import GourmetList from '@/components/gourmet/GourmetList.vue'
+import GourmetRecommend from "@/components/gourmet/GourmetRecommend.vue";
+import store from "@/store";
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Gourmet',
-  components: { GourmetList },
+  computed: {
+    store() {
+      return store
+    }
+  },
+  components: {GourmetRecommend, GourmetList },
   data() {
     return {
       img_path: require('@/assets/gourmet.jpg')
@@ -35,7 +45,7 @@ img {
 
 #count {
   margin-top: -350px;
-  margin-bottom: 200px;
+  margin-bottom: 230px;
   text-align: center;
 }
 

@@ -30,6 +30,10 @@
       </div>
 
       <div style="margin-top: 20px">
+        <Anchor :affix="false">
+          <AnchorLink href="#pl" title="Basic Usage" />
+
+        </Anchor>
         <Button type="primary">
           <Icon type="md-create"/>
           写评论
@@ -136,14 +140,14 @@
         </div>
 
       <div><span class="span"></span><div style="display: inline-block;width: 80%;background: #f6f6f6;font-size: 13px;line-height: 18px;padding: 5px">评价和打分都将是其他网友的参考依据，并影响该商户评价。请发布真实、客观的本人消费体验评价。如您收到威逼、利诱如优惠等干扰而发布的评价或并非本人体验的虚假/恶意评价，则评价视为违规，同时影响您的信誉度。</div></div>
-      <div><span class="span"></span><Button type="info" style="width: 120px;" @click="mySubmit">发表评论</Button></div>
+      <div id="pl"><span class="span"></span><Button type="info" style="width: 120px;" @click="mySubmit">发表评论</Button></div>
     </div>
   </div>
 </template>
 
 <script>
 import {
-  Grid, GridItem, Icon, Rate, Space, Input, Button, Upload, Image
+  Grid, GridItem, Icon, Rate, Space, Input, Button, Upload, Image, Anchor, AnchorLink
 } from 'view-ui-plus'
 import { ShareTwo, Star, Caution } from '@icon-park/vue-next'
 import axios from 'axios'
@@ -159,6 +163,8 @@ export default {
     }
   },
   components: {
+    AnchorLink,
+    Anchor,
     Image,
     Upload,
     // eslint-disable-next-line vue/no-unused-components
@@ -261,7 +267,11 @@ export default {
         }
       })
       if (this.mydata.score === 0 || this.mydata.text === '') {
-        this.$Message.error('评分和评论不能为空')
+        this.$Message.error('评分和评论不能为空!')
+        return
+      }
+      if(store.state.user === ''){
+        this.$Message.error('未登录，请先登录!')
         return
       }
       axios.post('/comments/addOne', {

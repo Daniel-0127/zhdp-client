@@ -1,3 +1,4 @@
+<!--评论-->
 <template>
   <div>
     <Grid :col="1" style=" background-color: #fff;">
@@ -41,10 +42,12 @@ import {
 } from 'view-ui-plus'
 import { Like } from '@icon-park/vue-next'
 import store from '@/store'
+import {Grid} from "@element-plus/icons-vue";
 
 export default {
   name: 'GourmetComments',
   components: {
+    Grid,
     GridItem,
     Rate,
     Image,
@@ -78,12 +81,21 @@ export default {
     },
     //   点赞
     like(id) {
+      if(this.store.state.user === ''){
+        this.$Message.warning("未登录")
+        return
+      }
       this.axios.post('/comments/like', {
         user_id: this.store.state.user.id,
         like_user_id: id,
         shop_id: this.$route.query.id
       }).then((res)=>{
-        console.log(res)
+        if(res.data.success===false){
+          this.$Message.warning(res.data.message)
+        }else {
+          this.$Message.success("点赞成功")
+        }
+
       })
     }
   },
@@ -94,10 +106,7 @@ export default {
 </script>
 
 <style scoped>
-#pic {
-  /*height: 120px;*/
-  /*width: 100%;*/
-}
+
 
 #pic img {
   margin-left: 5px;
