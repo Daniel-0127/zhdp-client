@@ -7,6 +7,10 @@ import router from './router'
 import store from './store'
 import '@icon-park/vue-next/styles/index.css'
 import 'view-ui-plus/dist/styles/viewuiplus.css'
+
+
+
+
 const app = createApp(App)
 app.use(store)
     .use(router)

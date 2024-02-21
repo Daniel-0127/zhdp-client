@@ -38,11 +38,11 @@
 
 <script>
 import {
-  GridItem, Image, Rate, Space
+  GridItem, Image, Rate, Space,Grid
 } from 'view-ui-plus'
 import { Like } from '@icon-park/vue-next'
 import store from '@/store'
-import {Grid} from "@element-plus/icons-vue";
+// import {Grid} from "@element-plus/icons-vue";
 
 export default {
   name: 'GourmetComments',
