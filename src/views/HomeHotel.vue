@@ -1,6 +1,6 @@
 <template>
   <div style="background-color:#f6f6f6;">
- <Top></Top>
+    <Top></Top>
     <router-view></router-view>
     <BackTop :height="300" :bottom="100">
       <div class="top">返回顶端</div>
@@ -9,18 +9,13 @@
 </template>
 
 <script>
-
-// import { Affix } from 'view-ui-plus'
 import Top from '@/components/top/Top.vue'
 import {BackTop} from "view-ui-plus";
 
+
 export default {
-  name: 'HomeView',
-  components: {
-    BackTop,
-    // Affix,
-    Top
-  }
+  name: 'HomeHotel',
+  components: {BackTop, Top}
 }
 </script>
 

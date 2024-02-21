@@ -1,15 +1,18 @@
+<!--优惠券-->
 <template>
-  <view class="tickets">
-    <view class="l-tickets">
+  <div class="tickets">
+    <div class="l-tickets">
       <div style="font-size: 77px;line-height:88px;display: inline;">{{price_}}</div>
       <div style="font-size: 29px;display: inline;">元</div>
       <div style="font-size: 16px;margin-top: -10px">全店{{limit_}}可用</div>
-    </view>
-    <view class="r-tickets">{{type_}}</view>
-  </view>
+    </div>
+    <div class="r-tickets">{{type_}}</div>
+  </div>
 </template>
 
 <script>
+
+
 export default {
   name: 'GourmetCoupon',
   props: { type_: String, price_: Number, limit_: String }

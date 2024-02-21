@@ -1,3 +1,4 @@
+<!--展示页面-->
 <template>
   <div id="gourmet">
     <img :src="img_path" alt="1">
@@ -12,13 +13,12 @@
 </template>
 
 <script>
-import GourmetList from '@/components/gourmet/GourmetList.vue'
-import GourmetRecommend from "@/components/gourmet/GourmetRecommend.vue";
+import GourmetList from '@/components/gourmet/show/GourmetList.vue'
+import GourmetRecommend from "@/components/gourmet/show/GourmetRecommend.vue";
 import store from "@/store";
 
 export default {
-  // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Gourmet',
+  name: 'GourmetShow',
   computed: {
     store() {
       return store

@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'Hotel',
+  name: 'HotelShow',
   data() {
     return {
       img_path: require('@/assets/hotel.jpg')

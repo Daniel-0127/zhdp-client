@@ -1,6 +1,9 @@
 <template>
   <div style="background-color:#f6f6f6;">
-    <Top></Top>
+    <Affix :offset-top="0">
+      <Top></Top>
+
+    </Affix>
     <router-view></router-view>
     <BackTop :height="300" :bottom="100">
       <div class="top">返回顶端</div>
@@ -9,13 +12,24 @@
 </template>
 
 <script>
-import Top from '@/components/top/Top.vue'
-import {BackTop} from "view-ui-plus";
 
+
+import {Menu,Affix, BackTop, Icon, MenuGroup, MenuItem} from "view-ui-plus";
+import Top from "@/components/top/Top.vue";
+import MyMenu from "@/components/my/MyMenu.vue";
 
 export default {
-  name: 'HomeGourmet',
-  components: {BackTop, Top}
+  name: 'HomeMy',
+  components: {
+    MyMenu,
+    Icon,
+    MenuItem,
+    MenuGroup,
+    Affix,
+    Menu,
+    Top,
+    BackTop
+  }
 }
 </script>
 

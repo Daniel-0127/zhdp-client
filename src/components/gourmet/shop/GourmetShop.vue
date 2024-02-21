@@ -1,3 +1,4 @@
+<!--店铺详情-->
 <template>
   <div id="body">
     <!--    详情-->
@@ -12,11 +13,7 @@
         <span style="padding-left: 15px">包装:&nbsp;{{ shop.package_score }}</span>
         <span style="padding-left: 15px">配送(骑手):&nbsp;{{ shop.rider_score }}</span>
       </div>
-      <div class="title">地址:&nbsp;{{ shop.address }}
-        <a href="javaScript:void(0);">
-        <local-two theme="outline" size="20" fill="#2d8cf0" @click="showModal"/>
-        </a>
-      </div>
+      <div class="title">地址:&nbsp;{{ shop.address }}</div>
       <div class="title">电话:&nbsp;{{ shop.phone }}</div>
       <div style="font-size: 12px">
         <div v-if="!showDetail">
@@ -34,14 +31,13 @@
       </div>
 
       <div style="margin-top: 20px">
-        <Anchor :affix="false">
-          <AnchorLink href="#pl" title="Basic Usage" />
 
-        </Anchor>
-        <Button type="primary">
-          <Icon type="md-create"/>
-          写评论
-        </Button>
+          <Button type="primary" href="#pl" @click="goAnchor('#pl')">
+            <Icon type="md-create"/>
+            写评论
+          </Button>
+
+
         <div id="other" style="float:right;">
           <a>
             <share-two theme="outline" size="25" fill="#4a4a4a"/>
@@ -59,32 +55,6 @@
       </div>
 
     </div>
-
-<!--    地图-->
-    <div>
-      <Modal
-          v-model="modal"
-          :footer-hide = "true"
-          width="1100"
-          :fullscreen="fullscreen"
-          :reset-drag-position="true"
-          :style="{top:!fullscreen?'75px':'0'}"
-      >
-        <template #header>
-          <p style="color:#f60;text-align:center">
-            {{shop.name}}
-            <a href="javaScript:void(0);" style="float:right;margin-right: 32px" @click="fullscreen = !fullscreen">
-            <full-screen v-if="!fullscreen" style="position:fixed;padding-top: 60px;z-index: 2;" theme="outline" size="22" fill="#000"/>
-            <off-screen v-else theme="outline" style="position:fixed;;padding-top: 60px;z-index: 2;" size="24" fill="#000"/>
-          </a>
-          </p>
-        </template>
-
-          <MyMap :myh="fullscreen"></MyMap>
-      </Modal>
-    </div>
-
-
     <!--    促销-->
     <div style="margin-top: 20px;padding:12px 0 12px 18px">
       <p style="font-size: 21px;font-weight: bolder">优惠促销</p>
@@ -95,16 +65,14 @@
           <div style="font-size: 18px;left: 120px">{{ item.type }}1张</div>
           <div style="font-size: 33px;color: #fa5e00;display: inline;line-height: 120px">￥{{ item.now_price }}</div>
           <div style="text-decoration: line-through;display: inline;">￥{{ item.before_price }}</div>
-          <div style="float:right;color: red">剩余{{ item.amount }}</div>
+          <div style="float:right;color: red;width: 50px;">剩余{{ item.amount }}</div>
           <div style="float: right;margin-right: 10%">
             <Button type="primary" @click="grab(item.id,index)">立即抢购</Button>
           </div>
-
         </GridItem>
       </Grid>
-
     </div>
-        评论
+<!--        评论-->
     <div style="margin-top: 20px;padding:12px 0 12px 18px">
       <p style="font-size: 21px;font-weight: bolder">评论区</p>
       <GourmetComments></GourmetComments>
@@ -164,14 +132,14 @@
 
 <script>
 import {
-  Grid, GridItem, Icon, Rate, Space, Input, Button, Upload, Image, Anchor, AnchorLink, Modal
+  Grid, GridItem, Icon, Rate, Space, Input, Button, Upload, Image
 } from 'view-ui-plus'
-import { ShareTwo, Star, Caution ,LocalTwo,FullScreen,OffScreen} from '@icon-park/vue-next'
+import { ShareTwo, Star, Caution } from '@icon-park/vue-next'
 import axios from 'axios'
-import GourmetCoupon from '@/components/gourmet/GourmetCoupon.vue'
-import GourmetComments from '@/components/gourmet/GourmetComments.vue'
+import GourmetCoupon from '@/components/gourmet/shop/GourmetCoupon.vue'
+import GourmetComments from '@/components/gourmet/shop/GourmetComments.vue'
 import store from '@/store'
-import MyMap from "@/components/MyMap.vue";
+
 export default {
   name: 'GourmetShop',
   computed: {
@@ -180,12 +148,6 @@ export default {
     }
   },
   components: {
-    OffScreen,
-    FullScreen,
-    MyMap,
-    Modal,
-    AnchorLink,
-    Anchor,
     Image,
     Upload,
     // eslint-disable-next-line vue/no-unused-components
@@ -200,8 +162,7 @@ export default {
     Rate,
     ShareTwo,
     Star,
-    Caution,
-    LocalTwo
+    Caution
   },
   data() {
     return {
@@ -219,10 +180,6 @@ export default {
       loadingStatus: false,
       index: 0,
       files: [],
-      modal:false,
-      fullscreen:false,
-      center: { lng: 0, lat: 0 },
-      zoom: 3
     }
   },
   methods: {
@@ -302,7 +259,7 @@ export default {
       }
       axios.post('/comments/addOne', {
         user_id: store.state.user.id,
-        shop_id: this.$route.query.id,
+        shop_id: this.$route.params.id,
         text: this.mydata.text,
         store_score: this.mydata.score,
         pics: pic
@@ -323,16 +280,16 @@ export default {
         }
       })
     },
-    //展示地图
-    showModal(){
-      this.modal = true
-    },
+  //   锚点定位
+    //模拟锚点跳转
+    goAnchor(selector) {//参数selector是id选择器（#anchor14）
+      document.querySelector(selector).scrollIntoView({behavior: "smooth"})
+      },
   },
   created() {
-    this.getById(this.$route.query.id)
-    this.getVouchers(this.$route.query.id)
-  },
-
+    this.getById(this.$route.params.id)
+    this.getVouchers(this.$route.params.id)
+  }
 }
 </script>
 
@@ -373,5 +330,7 @@ export default {
   margin-top: 10px;
 }
 
+.ivu-anchor-link-title{
 
+}
 </style>

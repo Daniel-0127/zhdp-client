@@ -10,7 +10,7 @@
           <div>
             <Rate allow-half v-model="item.store_score" disabled/>
           </div>
-          <div>{{ item.text }}</div>
+          <div id="text" style="white-space: pre-line;">{{ item.text }}</div>
           <!--                <div id="pic" >-->
           <!--                  <div v-for="it in item.pics" style="display: inline-block;"><img :src="store.state.img_path+it" alt="11"></div>-->
           <!--                </div>-->
@@ -38,11 +38,10 @@
 
 <script>
 import {
-  GridItem, Image, Rate, Space,Grid
+  GridItem, Image, Rate, Space, Grid
 } from 'view-ui-plus'
 import { Like } from '@icon-park/vue-next'
 import store from '@/store'
-// import {Grid} from "@element-plus/icons-vue";
 
 export default {
   name: 'GourmetComments',
@@ -70,9 +69,7 @@ export default {
         .then((res) => {
           console.log(res.data.data)
           this.datas = res.data.data
-          // eslint-disable-next-line no-plusplus
           for (let i = 0; i < this.datas.length; i++) {
-            // eslint-disable-next-line no-plusplus
             for (let j = 0; j < this.datas[i].pics.length; j++) {
               this.datas[i].pics[j] = store.state.img_path + this.datas[i].pics[j]
             }
@@ -88,7 +85,7 @@ export default {
       this.axios.post('/comments/like', {
         user_id: this.store.state.user.id,
         like_user_id: id,
-        shop_id: this.$route.query.id
+        shop_id: this.$route.params.id
       }).then((res)=>{
         if(res.data.success===false){
           this.$Message.warning(res.data.message)
@@ -100,7 +97,7 @@ export default {
     }
   },
   created() {
-    this.queryByShop(this.$route.query.id)
+    this.queryByShop(this.$route.params.id)
   }
 }
 </script>

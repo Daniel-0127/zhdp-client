@@ -2,6 +2,8 @@ const {defineConfig} = require('@vue/cli-service')
 
 
 module.exports = defineConfig({
+    //打包需要加上
+    // publicPath: './',
     transpileDependencies: true,
     devServer: {
         host: '0.0.0.0',
@@ -13,6 +15,8 @@ module.exports = defineConfig({
         }
 
     },
-    lintOnSave:false
+
+    lintOnSave:false,
+
 
 })

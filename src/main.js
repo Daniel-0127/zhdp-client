@@ -3,8 +3,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import ViewUIPlus from 'view-ui-plus'
 import App from './App.vue'
-import router from './router'
-import store from './store'
+import router from '@/router'
+import store from '@/store'
 import '@icon-park/vue-next/styles/index.css'
 import 'view-ui-plus/dist/styles/viewuiplus.css'
 
@@ -32,3 +32,8 @@ axios.interceptors.request.use((config) => {
     return config
 }, (error) => Promise.reject(error))
 
+window.onunhandledrejection = (event) => {
+    // 不兼容ie
+    console.warn(event.reason);
+    event.preventDefault();
+};

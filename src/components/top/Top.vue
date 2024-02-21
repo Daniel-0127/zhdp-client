@@ -7,23 +7,35 @@
       </div>
       <div class="div2">
 
-        <input type="search" v-model="search" id="search" placeholder="搜索美食、娱乐、旅游等"  @keyup.enter="search_"/>
+        <input type="search" v-model="search" id="search" placeholder="搜索美食、娱乐、旅游等" @keyup.enter="search_"/>
         <Icon type="md-search" size="23"
               style="display: inline-block;float: left;margin-left: -293px;margin-top: 17px"/>
       </div>
       <div class="div3">
-        <div>
-          <Icon type="md-create" size="22" fill="#333"/>
-          <p>点评</p>
-        </div>
+        <router-link to="/my/comments">
+          <div>
+            <Icon type="md-create" size="22" fill="#333"/>
+            <p>点评</p>
+          </div>
+        </router-link>
+        <router-link to="/my/collect">
         <div>
           <Icon type="md-heart-outline" size="22" fill="#333"/>
           <p>收藏</p>
         </div>
+        </router-link>
+        <router-link to="/my/message">
         <div>
           <Icon type="md-notifications-outline" size="22" fill="#333"/>
           <p>消息</p>
         </div>
+        </router-link>
+        <router-link to="/my/info">
+        <div>
+          <Icon type="md-person" size="22" fill="#333"/>
+          <p>个人中心</p>
+        </div>
+        </router-link>
         <div @click="login" v-if="store.state.user === ''">
           <Button type="primary"
                   style="background-color: black;border: none;width: 88px;height: 38px;margin-top: -10px;">
@@ -31,9 +43,9 @@
               登录</p>
           </Button>
         </div>
-        <div v-else style="float: right;margin-top: -30px" >
+        <div v-else style="float: right;margin-top: -30px">
           <Dropdown placement="right-start">
-            <a href="javascript:void(0)" >
+            <a href="javascript:void(0)">
               <img :src="store.state.img_path+store.state.user.picture" alt="11">
             </a>
             <template #list>
@@ -70,9 +82,9 @@
 
 import {
   Dropdown, DropdownItem, DropdownMenu,
-  Icon, MenuItem, TabPane, Tabs
+  Icon, Menu, MenuItem, Button, TabPane, Tabs
 } from 'view-ui-plus'
-import Gourmet from '@/components/gourmet/GourmetShow.vue'
+import Gourmet from '@/components/gourmet/show/GourmetShow.vue'
 import HomeLogin from '@/components/top/HomeLogin.vue'
 import store from '@/store'
 
@@ -89,6 +101,8 @@ export default {
     DropdownMenu,
     Dropdown,
     HomeLogin,
+    Button,
+    Menu,
     MenuItem,
     // eslint-disable-next-line vue/no-unused-components
     Gourmet,
@@ -112,11 +126,11 @@ export default {
     },
     isLogin() {
       this.axios.post('/user/isLogin')
-        .then((res) => {
-          if(res.data.success!==false){
-            this.$store.commit('updateUser', res.data.data)
-          }
-        })
+          .then((res) => {
+            if (res.data.success !== false) {
+              this.$store.commit('updateUser', res.data.data)
+            }
+          })
     },
     //   退出
     lagOut() {
@@ -124,14 +138,16 @@ export default {
         console.log(res)
         this.$Message.success(res.data.data)
         this.store.commit('updateUser', '')
+        this.store.commit('updateToken', '')
       })
     },
     // 搜索
     search_() {
-      this.axios.get('/shop/search', { params: { se: this.search } }).then((res) => {
+      this.axios.get('/shop/search', {params: {se: this.search}}).then((res) => {
+        //TODO 展示
         console.log(res)
       })
-    }
+    },
   },
   created() {
     this.isLogin()
@@ -140,7 +156,9 @@ export default {
 </script>
 
 <style scoped>
-
+a:visited{
+  /*color: #5b5656;*/
+}
 #body {
   width: 100%;
   height: 110px;
@@ -202,7 +220,8 @@ export default {
   height: 50px;
   width: 50px;
 }
-#div4{
+
+#div4 {
   width: 50%;
 }
 

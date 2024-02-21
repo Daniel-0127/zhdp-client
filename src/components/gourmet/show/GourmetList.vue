@@ -1,10 +1,11 @@
+<!--所有店铺-->
 <template>
   <div id="body">
-    <p>推荐店铺</p>
+    <p>所有店铺</p>
     <div id="center">
       <Grid :col="1" :hover="true" style=" background-color: #fff;">
         <a href="javaScript:void(0);" v-for="item in li" @click="toShop(item.id)" :key="item">
-          <GridItem><img :src="item.image_path" alt="11" style="float:left;">
+          <GridItem><img :src="item.image_path" alt="11" style="float:left;" referrerpolicy="no-referrer">
             <div style="font-size: 18px;font-weight: bold">{{ item.name }}</div>
             <div>
               <div style="float:left;padding-right: 12px;margin-top: 6px">
@@ -31,6 +32,9 @@
 
       </Grid>
     </div>
+    <div id="ye">
+      <Page v-model="page" :total="total" show-elevator  @on-change="getShops"/>
+    </div>
 
   </div>
 
@@ -38,44 +42,39 @@
 
 <script>
 import {
-  Grid, GridItem, Rate
+  Grid, GridItem, Page, Rate
 } from 'view-ui-plus'
-import store from '@/store'
+
 export default {
-  name: 'GourmetRecommend',
+  name: 'GourmetList',
   components: {
     Rate,
     GridItem,
     Grid,
+    Page
   },
   data() {
     return {
+      page: 1,
+      total: 10,
       li: [{}]
     }
   },
   methods: {
     getShops() {
-        this.axios.get('/shop/recommend1', { params: { user_id: store.state.user.id } })
-            .then((res) => {
-              console.log(res.data.data)
-              this.li = res.data.data
-            })
-
-
+      this.axios.get('/shop/queryAll', { params: { current: this.page } })
+        .then((res) => {
+          console.log(res.data.data)
+          this.li = res.data.data.records
+          this.total = res.data.data.pages * 10
+        })
     },
     toShop(id) {
-      this.$router.push({ path: '/gourmet/shop', query: { id } })
+      this.$router.push({ path: `/gourmet/shop/${id}` })
     }
   },
   created() {
-    //防止用户登录后没有数据
-    setTimeout(() => {
-      if(store.state.user!==''){
-        this.getShops()
-      }
-    },  150)
-
-
+    this.getShops()
   }
 }
 </script>
