@@ -4,16 +4,16 @@
     <!--    详情-->
     <div style="padding:12px 0 12px 18px">
       <p style="font-size: 26px;font-weight: bolder">{{ shop.name }}</p>
-      <Rate class="title" show-text allow-half disabled v-model="shop.shop_score" style="float:left;">
-        <span style="color: #f5a623">{{ shop.shop_score }}</span>
+      <Rate class="title" show-text allow-half disabled v-model="shop.star_shop" style="float:left;">
+        <span style="color: #f5a623">{{ shop.star_shop }}</span>
       </Rate>
       <div class="title" style="margin-top: 3px;height: 28px">
-        <span style="padding-left: 15px">{{ shop.rating_amount }}条评论</span>
-        <span style="padding-left: 15px">口味:&nbsp;{{ shop.taste_score }}</span>
-        <span style="padding-left: 15px">包装:&nbsp;{{ shop.package_score }}</span>
-        <span style="padding-left: 15px">配送(骑手):&nbsp;{{ shop.rider_score }}</span>
+        <span style="padding-left: 15px">{{ shop.comment }}条评论</span>
+        <span style="padding-left: 15px">口味:&nbsp;{{ shop.star_kw }}</span>
+        <span style="padding-left: 15px">环境:&nbsp;{{ shop.star_hj }}</span>
+        <span style="padding-left: 15px">服务:&nbsp;{{ shop.star_fw }}</span>
       </div>
-      <div class="title">地址:&nbsp;{{ shop.address }}
+      <div class="title">地址:&nbsp;{{ shop.address2 }}
         <a href="javaScript:void(0);">
           <local-two theme="outline" size="20" fill="#2d8cf0" @click="showModal"/>
         </a>
@@ -36,10 +36,10 @@
 
       <div style="margin-top: 20px">
 
-          <Button type="primary" href="#pl" @click="goAnchor('#pl')">
-            <Icon type="md-create"/>
-            写评论
-          </Button>
+        <Button type="primary" href="#pl" @click="goAnchor('#pl')">
+          <Icon type="md-create"/>
+          写评论
+        </Button>
 
 
         <div id="other" style="float:right;">
@@ -64,7 +64,7 @@
     <div>
       <Modal
           v-model="modal"
-          :footer-hide = "true"
+          :footer-hide="true"
           width="1100"
           :fullscreen="fullscreen"
           :reset-drag-position="true"
@@ -72,17 +72,37 @@
       >
         <template #header>
           <p style="color:#f60;text-align:center">
-            {{shop.name}}
+            {{ shop.name }}
             <a href="javaScript:void(0);" style="float:right;margin-right: 32px" @click="fullscreen = !fullscreen">
-              <full-screen v-if="!fullscreen" style="position:fixed;padding-top: 60px;z-index: 2;" theme="outline" size="22" fill="#000"/>
-              <off-screen v-else theme="outline" style="position:fixed;;padding-top: 60px;z-index: 2;" size="24" fill="#000"/>
+              <full-screen v-if="!fullscreen" style="position:fixed;margin-top: 60px;z-index: 2;" theme="outline"
+                           size="22" fill="#000"/>
+              <off-screen v-else theme="outline" style="position:fixed;margin-top: 60px;z-index: 2;" size="24"
+                          fill="#000"/>
             </a>
           </p>
         </template>
-
-        <MyMap :myh="fullscreen"></MyMap>
+        <MyMap :myh="fullscreen" :data_="shop"></MyMap>
       </Modal>
     </div>
+
+    <!--    推荐菜-->
+    <div style="margin-top: 20px;padding:12px 0 12px 18px">
+      <p style="font-size: 21px;font-weight: bolder">推荐菜</p>
+      <div style="margin-left: 30px;">
+        <ul style="display:table;height:124px;">
+          <li style="list-style: none;height: 125px;width:175px;float:left;" v-for="(item,index) in dish" :key="index">
+            <a href="javaScript:void(0);" class="dish">
+              <img :src="item.img" alt="" style="width: 140px;height: 90px;padding:3px;">
+              <div>
+                <span style="font-size: 13px;margin-left: 3px">{{ item.name }}</span>
+                <span style="float:right;margin-right: 3px">{{item.price}}</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <br>
 
     <!--    促销-->
     <div style="margin-top: 20px;padding:12px 0 12px 18px">
@@ -101,7 +121,7 @@
         </GridItem>
       </Grid>
     </div>
-<!--        评论-->
+    <!--        评论-->
     <div style="margin-top: 20px;padding:12px 0 12px 18px">
       <p style="font-size: 21px;font-weight: bolder">评论区</p>
       <GourmetComments></GourmetComments>
@@ -130,7 +150,8 @@
         </Rate>
       </div>
       <div><span class="span" style="display: block;float:left;">评价</span>
-        <Input v-model="mydata.text" type="textarea" :rows="5" placeholder="亲，菜品的口味如何，环境怎么样，服务满意吗？" style="width: 80%"/>
+        <Input v-model="mydata.text" type="textarea" :rows="5" placeholder="亲，菜品的口味如何，环境怎么样，服务满意吗？"
+               style="width: 80%"/>
       </div>
       <div><span class="span" style="display: block;float:left;">图片</span>
         <div style="display: inline-block;width: 80%;">
@@ -139,7 +160,7 @@
               accept="file"
               action="/comments/update"
               style="float:left;">
-            <Button >上传图片</Button>
+            <Button>上传图片</Button>
           </Upload>
           <span style="font-size: 13px;color: #9d9a9a;line-height: 33px;display: inline-block;margin-bottom: 10px">&nbsp;&nbsp;单张图片不超过10MB，尺寸不小于300*300px，支持jpg、png和bmp格式</span>
           <div>
@@ -151,24 +172,32 @@
             </div>
           </div>
         </div>
-        </div>
+      </div>
 
-      <div><span class="span"></span><div style="display: inline-block;width: 80%;background: #f6f6f6;font-size: 13px;line-height: 18px;padding: 5px">评价和打分都将是其他网友的参考依据，并影响该商户评价。请发布真实、客观的本人消费体验评价。如您收到威逼、利诱如优惠等干扰而发布的评价或并非本人体验的虚假/恶意评价，则评价视为违规，同时影响您的信誉度。</div></div>
-      <div id="pl"><span class="span"></span><Button type="info" style="width: 120px;" @click="mySubmit">发表评论</Button></div>
+      <div><span class="span"></span>
+        <div
+            style="display: inline-block;width: 80%;background: #f6f6f6;font-size: 13px;line-height: 18px;padding: 5px">
+          评价和打分都将是其他网友的参考依据，并影响该商户评价。请发布真实、客观的本人消费体验评价。如您收到威逼、利诱如优惠等干扰而发布的评价或并非本人体验的虚假/恶意评价，则评价视为违规，同时影响您的信誉度。
+        </div>
+      </div>
+      <div id="pl"><span class="span"></span>
+        <Button type="info" style="width: 120px;" @click="mySubmit">发表评论</Button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import {
-  Grid, GridItem, Icon, Rate, Input, Button, Upload, Image , Modal
+  Grid, GridItem, Icon, Rate, Input, Button, Upload, Image, Modal
 } from 'view-ui-plus'
-import { ShareTwo, Star, Caution ,LocalTwo,FullScreen,OffScreen} from '@icon-park/vue-next'
+import {ShareTwo, Star, Caution, LocalTwo, FullScreen, OffScreen} from '@icon-park/vue-next'
 import axios from 'axios'
 import store from '@/store'
 import MyMap from "@/components/MyMap.vue";
 import GourmetCoupon from "@/components/gourmet/shop/GourmetCoupon.vue";
 import GourmetComments from "@/components/gourmet/shop/GourmetComments.vue";
+
 export default {
   name: 'GourmetShop',
   components: {
@@ -194,6 +223,19 @@ export default {
   data() {
     return {
       shop: {},
+      dish: [{
+        id: 49,
+        img:
+            "https://qcloud.dpfile.com/pc/DwzWaL7Ga2Uq7yPS4Zxkg8fzw8_jSDlBYmaP-2NONtxddzh3SIx9_DMt34ghD4vnuzFvxlbkWx5uwqY2qcjixFEuLYk00OmSS1IdNpm8K8sG4JN9RIm2mTKcbLtc2o2vfCF2ubeXzk49OsGrXt_KYDCngOyCwZK-s3fqawWswzk.jpg",
+        name:
+            "招牌秘制烤鸡",
+        price:
+            "¥78",
+        shop_id:
+            "G3nY8eohdIM9nJEA",
+        update_time:
+            "2024-02-23T11:36:32",
+      }],
       voucher: {},
       showDetail: false,
       mydata: {
@@ -207,41 +249,45 @@ export default {
       loadingStatus: false,
       index: 0,
       files: [],
-      modal:false,
-      fullscreen:false,
-      center: { lng: 0, lat: 0 },
+      modal: false,
+      fullscreen: false,
+      center: {lng: 0, lat: 0},
       zoom: 3
     }
   },
   methods: {
+    // 获取店铺信息
     getById(id) {
-      this.axios.get('/shop/queryById', { params: { id } })
-        .then((res) => {
-          this.shop = res.data.data
-        })
+      this.axios.get('/shop/queryById', {params: {id}})
+          .then((res) => {
+            this.shop = res.data.data
+            this.shop.star_shop = ((this.shop.star_kw + this.shop.star_fw + this.shop.star_hj) / 3).toFixed(2)
+
+          })
     },
+    // 获取优惠券
     getVouchers(id) {
-      this.axios.get('/voucher/selectByShopId', { params: { shop_id: id } })
-        .then((res) => {
-          console.log(res.data)
-          this.voucher = res.data.data
-        })
+      this.axios.get('/voucher/selectByShopId', {params: {shop_id: id}})
+          .then((res) => {
+            console.log(res.data)
+            this.voucher = res.data.data
+          })
     },
     changeShow() {
       this.showDetail = !this.showDetail
     },
     grab(id, index) {
-      this.axios.post('/voucher/grabVoucher', { voucher_id: id })
-        .then((res) => {
-          // console.log(res)
-          if (res.data.success) {
-            this.$Message.success(res.data.data)
-            // eslint-disable-next-line no-plusplus
-            this.voucher[index].amount--
-          } else {
-            this.$Message.warning(res.data.message)
-          }
-        })
+      this.axios.post('/voucher/grabVoucher', {voucher_id: id})
+          .then((res) => {
+            // console.log(res)
+            if (res.data.success) {
+              this.$Message.success(res.data.data)
+              // eslint-disable-next-line no-plusplus
+              this.voucher[index].amount--
+            } else {
+              this.$Message.warning(res.data.message)
+            }
+          })
     },
     handleUpload(file) {
       // console.log(file)
@@ -252,13 +298,13 @@ export default {
     // 上传图片
     upload() {
       this.axios.post(
-        '/comments/update',
-        { file: this.file },
-        {
-          headers: {
-            'content-type': 'multipart/form-data'
+          '/comments/update',
+          {file: this.file},
+          {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
           }
-        }
       ).then((res) => {
         if (res.data.success) {
           this.$Message.success('Success')
@@ -284,7 +330,7 @@ export default {
         this.$Message.error('评分和评论不能为空!')
         return
       }
-      if(store.state.user === ''){
+      if (store.state.user === '') {
         this.$Message.error('未登录，请先登录!')
         return
       }
@@ -311,19 +357,27 @@ export default {
         }
       })
     },
-  //   锚点定位
+    //   锚点定位
     //模拟锚点跳转
     goAnchor(selector) {//参数selector是id选择器（#anchor14）
       document.querySelector(selector).scrollIntoView({behavior: "smooth"})
-      },
+    },
     //展示地图
-    showModal(){
+    showModal() {
       this.modal = true
     },
+    //查询菜谱
+    getDish(shop_id) {
+      axios.get('/shop/' + shop_id + '/dish').then((res) => {
+        console.log(res.data)
+        this.dish = res.data.data
+      })
+    }
   },
   created() {
     this.getById(this.$route.params.id)
     this.getVouchers(this.$route.params.id)
+    this.getDish(this.$route.params.id)
   }
 }
 </script>
@@ -361,9 +415,16 @@ export default {
   padding-right: 10px;
 }
 
-#myComments>div{
+#myComments > div {
   margin-top: 10px;
 }
+.dish{
+  display: table;
+  border: 2px solid #ebebeb;
+}
 
+.dish:hover{
+  border: 2px solid #fa5e00;
+}
 
 </style>

@@ -12,9 +12,22 @@ import {BMPGL} from "@/js/bmp.js"
 export default {
   name: "MyMap",
   props: {
-    myh: Boolean,
-    // eslint-disable-next-line vue/require-prop-type-constructor
-    required: true,
+    myh: {
+      type: Boolean,
+      default: () => {
+      }
+    },
+    data_:{
+      type:Object,
+      default: ()=>{
+        return {
+          address: '故宫博物院',
+          address2: '北京市东城区王府井大街88号乐天银泰百货八层',
+          lat: '106.660107',
+          lng: '29.348399'
+        }
+      }
+    }
   },
   data() {
     return {
@@ -22,7 +35,7 @@ export default {
       myMap: null
     };
   },
-  mounted() {
+  updated() {
     this.initMap()
   },
   methods: {
@@ -32,33 +45,52 @@ export default {
         // 创建地图实例
         let map = new BMapGL.Map("admap");
         // 创建点坐标 axios => res 获取的初始化定位坐标
-        let point = new BMapGL.Point(106.660107,29.348399)
+        let point = new BMapGL.Point(this.$props.data_.lat, this.$props.data_.lng)
 
         // 初始化地图，设置中心点坐标和地图级别
         map.centerAndZoom(point, 19)
+
+        // 创建点标记
+        var marker = new BMapGL.Marker(point);
+        map.addOverlay(marker);
+// 创建信息窗口
+        var opts = {
+          width: 200,
+          height: 100,
+          title: this.$props.data_.address
+        };
+        var infoWindow = new BMapGL.InfoWindow('地址：'+this.$props.data_.address2, opts);
+// 点标记添加点击事件
+        marker.addEventListener('click', function () {
+          map.openInfoWindow(infoWindow, point); // 开启信息窗口
+        });
 
         //开启鼠标滚轮缩放
         map.enableScrollWheelZoom(true)
         map.setHeading(64.5)
 
         // 添加比例尺控件
-        var scaleCtrl = new BMapGL.ScaleControl();
+        const scaleCtrl = new BMapGL.ScaleControl();
         map.addControl(scaleCtrl);
 
         // 添加缩放控件
-        var zoomCtrl = new BMapGL.ZoomControl();
+        const zoomCtrl = new BMapGL.ZoomControl({offset: new BMapGL.Size(20, 65)});
         map.addControl(zoomCtrl);
 
         // 添加3D控件
-        var navi3DCtrl = new BMapGL.NavigationControl3D();
+        const navi3DCtrl = new BMapGL.NavigationControl3D();
         map.addControl(navi3DCtrl);
 
-        // 创建城市选择控件
-        var cityControl = new BMapGL.CityListControl({
+        // 创建定位控件
+        const locationControl = new BMapGL.LocationControl({
+          // 控件的停靠位置（可选，默认左上角）
+          anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
           // 控件基于停靠位置的偏移量（可选）
-          offset: new BMapGL.Size(10, 5)
+          offset: new BMapGL.Size(14, 20)
         });
-        map.addControl(cityControl);
+        // 将控件添加到地图上
+        map.addControl(locationControl);
+
       }).catch((err) => {
         console.log(err)
       })
@@ -67,7 +99,7 @@ export default {
   created() {
 
   }
-};
+}
 </script>
 <style scoped>
 :root {
@@ -76,7 +108,6 @@ export default {
 
 #admap {
   width: 100%;
-  //height: 520px;
   display: flex;
   z-index: 1;
 }

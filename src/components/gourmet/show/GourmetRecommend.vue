@@ -9,23 +9,23 @@
             <div style="font-size: 18px;font-weight: bold">{{ item.name }}</div>
             <div>
               <div style="float:left;padding-right: 12px;margin-top: 6px">
-                <Rate show-text allow-half disabled v-model="item.shop_score">
-                  <span style="color: #f5a623">{{ item.shop_score }}</span>
+                <Rate show-text allow-half disabled v-model="item.star_shop">
+                  <span style="color: #f5a623">{{item.star_shop }}</span>
                 </Rate>
               </div>
               <div style="padding-top: 5px;">
-                <span class="span">{{ item.rating_amount }}条评论</span>
-                <span class="span">{{ item.month_sales }}</span>
+                <span class="span">{{ item.comment }}条评论</span>
+                <span class="span">人均：{{ item.price }}</span>
               </div>
 
             </div>
             <div>
-              <span class="span">{{ item.category }}</span>
-              <span class="span">{{ item.district }}</span>
+              <span class="span">{{ item.type }}</span>
+              <span class="span">{{ item.address }}</span>
             </div>
             <div>
-              <span class="span">{{ item.food_safety }}</span>
-              <span class="span">{{ item.tags }}</span>
+              <span>推荐菜：{{ item.recommend }}</span>
+              <!--              <span class="span">{{ item.tags }}</span>-->
             </div>
           </GridItem>
         </a>
@@ -60,6 +60,9 @@ export default {
             .then((res) => {
               console.log(res.data.data)
               this.li = res.data.data
+              this.li.forEach(item => {
+                item.star_shop=((Number(item.star_kw) + Number(item.star_fw) + Number(item.star_hj))/3.0).toFixed(2)
+              })
             })
 
 
@@ -109,10 +112,7 @@ p {
   padding-left: 10px;
 
 }
-#ye {
-  text-align: center;
-  margin: 30px 0;
-}
+
 
 .ivu-grid-item {
   height: 200px;

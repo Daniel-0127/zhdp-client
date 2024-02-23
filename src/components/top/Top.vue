@@ -146,6 +146,7 @@ export default {
       this.axios.get('/shop/search', {params: {se: this.search}}).then((res) => {
         //TODO 展示
         console.log(res)
+        this.store.commit('updateSearch',res.data.data)
       })
     },
   },

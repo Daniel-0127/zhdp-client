@@ -1,7 +1,7 @@
-<!--所有店铺-->
+<!--搜索店铺-->
 <template>
   <div id="body">
-    <p>所有店铺</p>
+    <p>搜索店铺</p>
     <div id="center">
       <Grid :col="1" :hover="true" style=" background-color: #fff;">
         <a href="javaScript:void(0);" v-for="item in li" @click="toShop(item.id)" :key="item">
@@ -25,15 +25,11 @@
             </div>
             <div>
               <span>推荐菜：{{ item.recommend }}</span>
-<!--              <span class="span">{{ item.tags }}</span>-->
             </div>
           </GridItem>
         </a>
 
       </Grid>
-    </div>
-    <div id="ye">
-      <Page v-model="page" :total="total" show-elevator  @on-change="getShops"/>
     </div>
 
   </div>
@@ -42,42 +38,39 @@
 
 <script>
 import {
-  Grid, GridItem, Page, Rate
+  Grid, GridItem, Rate
 } from 'view-ui-plus'
+import store from "@/store";
 
 export default {
-  name: 'GourmetList',
+  name: 'GourmetSearch',
+  computed: {
+    store() {
+      return store
+    }
+  },
   components: {
     Rate,
     GridItem,
     Grid,
-    Page
   },
   data() {
     return {
-      page: 1,
-      total: 10,
       li: []
     }
   },
   methods: {
-    getShops() {
-      this.axios.get('/shop/queryAll', { params: { current: this.page } })
-        .then((res) => {
-          console.log(res.data.data)
-          this.li = res.data.data.records
-          this.li.forEach(item => {
-            item.star_shop=((Number(item.star_kw) + Number(item.star_fw) + Number(item.star_hj))/3.0).toFixed(2)
-          })
-          this.total = res.data.data.pages * 10
-        })
-    },
     toShop(id) {
       this.$router.push({ path: `/gourmet/shop/${id}` })
     }
   },
-  created() {
-    this.getShops()
+  updated() {
+    this.li = this.$store.state.search
+    if(this.li.length>0){
+      this.li.forEach(item => {
+        item.star_shop=((Number(item.star_kw) + Number(item.star_fw) + Number(item.star_hj))/3.0).toFixed(2)
+      })
+    }
   }
 }
 </script>
@@ -110,10 +103,7 @@ p {
   padding-left: 10px;
 
 }
-#ye {
-  text-align: center;
-  margin: 30px 0;
-}
+
 
 .ivu-grid-item {
   height: 200px;

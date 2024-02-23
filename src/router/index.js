@@ -10,7 +10,6 @@ import App from "@/App.vue";
 import HomeHotel from "@/views/HomeHotel.vue";
 import HotelShow from "@/components/hotel/HotelShow.vue";
 import HomeMy from "@/views/HomeMy.vue";
-import MyMain from "@/components/my/MyMenu.vue";
 import MyInfo from "@/components/my/MyInfo.vue";
 import MyComments from "@/components/my/MyComments.vue";
 import MyCollect from "@/components/my/MyCollect.vue";

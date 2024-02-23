@@ -1,4 +1,4 @@
-
+// 百度地图
 export function BMPGL(ak) {
     return new Promise(function (resolve, reject) {
         window.init = function () {

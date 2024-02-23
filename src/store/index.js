@@ -4,7 +4,8 @@ export default createStore({
   state: {
     img_path: 'http://localhost:10086/IMG',
     user: '',
-    token: ''
+    token: '',
+    search: ''
   },
   getters: {
   },
@@ -16,6 +17,9 @@ export default createStore({
     updateToken(state, token1) {
       state.token = token1
       sessionStorage.token = token1
+    },
+    updateSearch(state, search) {
+      state.search = search
     }
   },
   actions: {
