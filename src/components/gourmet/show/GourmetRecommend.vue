@@ -87,7 +87,7 @@ export default {
 <style scoped>
 #body {
   width: 80%;
-  margin: 30px auto auto;
+  margin: 0  auto;
 }
 
 p {

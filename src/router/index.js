@@ -1,14 +1,10 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import Travel from '@/components/Travel.vue'
-import Recreation from '@/components/Recreation.vue'
 import MyEmpty from '@/components/MyEmpty.vue'
 import HomeGourmet from '@/views/HomeGourmet.vue'
 import GourmetShow from '@/components/gourmet/show/GourmetShow.vue'
 import GourmetShop from '@/components/gourmet/shop/GourmetShop.vue'
 import store from '@/store'
 import App from "@/App.vue";
-import HomeHotel from "@/views/HomeHotel.vue";
-import HotelShow from "@/components/hotel/HotelShow.vue";
 import HomeMy from "@/views/HomeMy.vue";
 import MyInfo from "@/components/my/MyInfo.vue";
 import MyComments from "@/components/my/MyComments.vue";
@@ -28,19 +24,7 @@ const routes = [
                 children: [{path: 'show', component: GourmetShow},
                     {path: 'shop/:id', component: GourmetShop}]
             },
-            {
-                path: 'hotel',
-                component: HomeHotel,
-                redirect: '/hotel/show',
-                children: [{path: 'show',component: HotelShow}]},
-            {
-                path: 'recreation',
-                component: Recreation
-            },
-            {
-                path: 'travel',
-                component: Travel
-            },
+
             {
                 path: 'my',
                 component: HomeMy,

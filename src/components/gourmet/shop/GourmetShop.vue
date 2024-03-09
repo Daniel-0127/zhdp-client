@@ -1,6 +1,13 @@
 <!--店铺详情-->
 <template>
+  <!--    返回-->
+  <a href="javascript:void(0)" title="返回" @click="onBack">
+    <left theme="outline" size=42 fill="#333" style="float:left;margin-left: 140px;margin-top: 15px"/>
+  </a>
+
   <div id="body">
+
+
     <!--    详情-->
     <div style="padding:12px 0 12px 18px">
       <p style="font-size: 26px;font-weight: bolder">{{ shop.name }}</p>
@@ -129,11 +136,6 @@
     <!--    我要评论-->
     <div style="margin-top: 20px;padding:12px 0 12px 18px" id="myComments">
       <p style="font-size: 21px;font-weight: bolder">我要评价</p>
-      <div><span class="span">总体评价</span>
-        <Rate class="title" show-text allow-half v-model="mydata.score">
-          <span style="color: #f5a623">{{ mydata.score }}</span>
-        </Rate>
-      </div>
       <div><span class="span">口味</span>
         <Rate class="title" show-text allow-half v-model="mydata.kw">
           <span style="color: #f5a623">{{ mydata.kw }}</span>
@@ -191,7 +193,7 @@
 import {
   Grid, GridItem, Icon, Rate, Input, Button, Upload, Image, Modal
 } from 'view-ui-plus'
-import {ShareTwo, Star, Caution, LocalTwo, FullScreen, OffScreen} from '@icon-park/vue-next'
+import {ShareTwo, Star, Caution, LocalTwo, FullScreen, OffScreen,Left} from '@icon-park/vue-next'
 import axios from 'axios'
 import store from '@/store'
 import MyMap from "@/components/MyMap.vue";
@@ -211,6 +213,7 @@ export default {
     Upload,
     Input,
     Button,
+    Left,
     Grid,
     GridItem,
     Icon,
@@ -239,7 +242,6 @@ export default {
       voucher: {},
       showDetail: false,
       mydata: {
-        score: 0,
         kw: 0,
         fw: 0,
         hj: 0,
@@ -261,7 +263,7 @@ export default {
       this.axios.get('/shop/queryById', {params: {id}})
           .then((res) => {
             this.shop = res.data.data
-            this.shop.star_shop = ((this.shop.star_kw + this.shop.star_fw + this.shop.star_hj) / 3).toFixed(2)
+            this.shop.star_shop = Number(((this.shop.star_kw + this.shop.star_fw + this.shop.star_hj) / 3).toFixed(2))
 
           })
     },
@@ -277,6 +279,10 @@ export default {
       this.showDetail = !this.showDetail
     },
     grab(id, index) {
+      if (store.state.user === '') {
+        this.$Message.error('未登录，请先登录!')
+        return
+      }
       this.axios.post('/voucher/grabVoucher', {voucher_id: id})
           .then((res) => {
             // console.log(res)
@@ -297,6 +303,10 @@ export default {
     },
     // 上传图片
     upload() {
+      if (store.state.user === '') {
+        this.$Message.error('未登录，请先登录!')
+        return
+      }
       this.axios.post(
           '/comments/update',
           {file: this.file},
@@ -326,7 +336,7 @@ export default {
           pic = `${pic};${s.split('/IMG')[1]}`
         }
       })
-      if (this.mydata.score === 0 || this.mydata.text === '') {
+      if (this.mydata.kw === 0 || this.mydata.hj === 0 || this.mydata.fw === 0 || this.mydata.text === '') {
         this.$Message.error('评分和评论不能为空!')
         return
       }
@@ -338,14 +348,15 @@ export default {
         user_id: store.state.user.id,
         shop_id: this.$route.params.id,
         text: this.mydata.text,
-        store_score: this.mydata.score,
+        score_kw: this.mydata.kw,
+        score_hj: this.mydata.hj,
+        score_fw: this.mydata.fw,
         pics: pic
       }).then((res) => {
         console.log(res)
         if (res.data.success) {
           this.$Message.success('发布成功！')
           this.mydata = {
-            score: 0,
             kw: 0,
             fw: 0,
             hj: 0,
@@ -372,7 +383,11 @@ export default {
         console.log(res.data)
         this.dish = res.data.data
       })
-    }
+    },
+    //返回主页
+    onBack(){
+      this.$router.push('../')
+    },
   },
   created() {
     this.getById(this.$route.params.id)
@@ -386,7 +401,7 @@ export default {
 #body {
   width: 75%;
   /*height: 1200px;*/
-  margin: 20px auto;
+  margin: 15px auto;
 }
 
 #body > div {

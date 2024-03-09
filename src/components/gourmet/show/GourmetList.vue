@@ -67,7 +67,7 @@ export default {
           console.log(res.data.data)
           this.li = res.data.data.records
           this.li.forEach(item => {
-            item.star_shop=((Number(item.star_kw) + Number(item.star_fw) + Number(item.star_hj))/3.0).toFixed(2)
+            item.star_shop=Number(((item.star_kw + item.star_fw + item.star_hj)/3).toFixed(2))
           })
           this.total = res.data.data.pages * 10
         })

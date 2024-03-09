@@ -23,8 +23,8 @@ export default {
         return {
           address: '故宫博物院',
           address2: '北京市东城区王府井大街88号乐天银泰百货八层',
-          lat: '106.660107',
-          lng: '29.348399'
+          lon: '106.660107',
+          lat: '29.348399'
         }
       }
     }
@@ -45,7 +45,7 @@ export default {
         // 创建地图实例
         let map = new BMapGL.Map("admap");
         // 创建点坐标 axios => res 获取的初始化定位坐标
-        let point = new BMapGL.Point(this.$props.data_.lat, this.$props.data_.lng)
+        let point = new BMapGL.Point(this.$props.data_.lon, this.$props.data_.lat)
 
         // 初始化地图，设置中心点坐标和地图级别
         map.centerAndZoom(point, 19)

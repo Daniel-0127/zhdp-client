@@ -1,9 +1,10 @@
 <template>
   <div id="body">
-    <div style="margin: 0 200px;padding-top: 10px">
+    <div style="margin: 0 190px;padding-top: 10px">
       <div class="div1">
         <img :src="img" alt="图标" style="width: 45px;height: 45px;float:left;">
-        <p id="title">Smart Review</p>
+<!--        <p id="title">Smart Review</p>-->
+        <p id="title">智慧点评</p>
       </div>
       <div class="div2">
 
@@ -56,22 +57,22 @@
           </Dropdown>
         </div>
       </div>
-      <div id="div4">
-        <Menu mode="horizontal" theme="light" active-name="美食">
-          <MenuItem name="美食" to="/gourmet">
-            美食
-          </MenuItem>
-          <MenuItem name="酒店" to="/hotel">
-            酒店
-          </MenuItem>
-          <MenuItem name="休闲娱乐" to="/recreation">
-            休闲娱乐
-          </MenuItem>
-          <MenuItem name="旅游" to="/travel">
-            旅游
-          </MenuItem>
-        </Menu>
-      </div>
+<!--      <div id="div4">-->
+<!--        <Menu mode="horizontal" theme="light" active-name="美食">-->
+<!--          <MenuItem name="美食" to="/gourmet">-->
+<!--            美食-->
+<!--          </MenuItem>-->
+<!--          <MenuItem name="酒店" to="/hotel">-->
+<!--            酒店-->
+<!--          </MenuItem>-->
+<!--          <MenuItem name="休闲娱乐" to="/recreation">-->
+<!--            休闲娱乐-->
+<!--          </MenuItem>-->
+<!--          <MenuItem name="旅游" to="/travel">-->
+<!--            旅游-->
+<!--          </MenuItem>-->
+<!--        </Menu>-->
+<!--      </div>-->
       <HomeLogin ref="login"></HomeLogin>
 
     </div>
@@ -82,7 +83,7 @@
 
 import {
   Dropdown, DropdownItem, DropdownMenu,
-  Icon, Menu, MenuItem, Button, TabPane, Tabs
+  Icon, Button, TabPane, Tabs
 } from 'view-ui-plus'
 import Gourmet from '@/components/gourmet/show/GourmetShow.vue'
 import HomeLogin from '@/components/top/HomeLogin.vue'
@@ -102,8 +103,6 @@ export default {
     Dropdown,
     HomeLogin,
     Button,
-    Menu,
-    MenuItem,
     // eslint-disable-next-line vue/no-unused-components
     Gourmet,
     // eslint-disable-next-line vue/no-unused-components
@@ -162,7 +161,7 @@ a:visited{
 }
 #body {
   width: 100%;
-  height: 110px;
+  height: 70px;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.25) 0 14px 28px, rgba(0, 0, 0, 0.22) 0 5px 5px;
 }
