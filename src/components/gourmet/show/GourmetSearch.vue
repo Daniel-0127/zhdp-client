@@ -68,6 +68,14 @@ export default {
     this.li = this.$store.state.search
     if(this.li.length>0){
       this.li.forEach(item => {
+        item.star_shop=Number(((item.star_kw + item.star_fw + item.star_hj)/3).toFixed(2))
+      })
+    }
+  },
+  created() {
+    this.li = this.$store.state.search
+    if(this.li.length>0){
+      this.li.forEach(item => {
         item.star_shop=((Number(item.star_kw) + Number(item.star_fw) + Number(item.star_hj))/3.0).toFixed(2)
       })
     }

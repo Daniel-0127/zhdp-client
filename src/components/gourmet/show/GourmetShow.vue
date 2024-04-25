@@ -6,8 +6,8 @@
       <p>最新点评， 对比低价。</p>
       <input v-model="search" type="search" placeholder="美食或者店铺名" @keyup.enter="search_">
     </div>
-    <GourmetRecommend v-show="store.state.user!==''"></GourmetRecommend>
     <GourmetSearch v-show="store.state.search.length>0"></GourmetSearch>
+    <GourmetRecommend></GourmetRecommend>
     <GourmetList></GourmetList>
 
   </div>

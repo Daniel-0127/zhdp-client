@@ -1,43 +1,46 @@
 <!--评论-->
 <template>
-  <div>
-    <Grid :col="1" style=" background-color: #fff;">
-      <GridItem v-for="(item,index) in datas" :key="index">
-        <div style="float:left;width: 80px;height: 80px;"><img :src="store.state.img_path +item.picture" alt="头像"
-                                                               style="width: 88px;border-radius: 45px;"></div>
-        <div style="float:left;width: 80%;margin-left: 20px;">
-          <div>{{ item.nickname }}</div>
-          <div style="float:left;">
-            <Rate allow-half v-model="item.store_score" disabled/>
-          </div>
-          <div style="line-height: 33px">
-            <span style="padding-left: 15px">口味:&nbsp;{{ item.score_kw }}</span>
-            <span style="padding-left: 15px">环境:&nbsp;{{ item.score_hj }}</span>
-            <span style="padding-left: 15px">服务:&nbsp;{{ item.score_fw }}</span>
-          </div>
-          <div id="text" style="white-space: pre-line;">{{ item.text }}</div>
-          <!--                <div id="pic" >-->
-          <!--                  <div v-for="it in item.pics" style="display: inline-block;"><img :src="store.state.img_path+it" alt="11"></div>-->
-          <!--                </div>-->
-
-          <Space wrap style="margin-top: 10px;">
-            <div v-for="(url, index) in item.pics" :key="url">
-              <Image :src="url" fit="contain" width="120px" height="80px" preview
-                     :preview-list="item.pics" :initial-index="index"/>
+  <div v-show="datas.length > 0" style="margin-top: 20px;padding:12px 0 12px 18px">
+    <p style="font-size: 21px;font-weight: bolder">评论区</p>
+    <div>
+      <Grid :col="1" style=" background-color: #fff;">
+        <GridItem v-for="(item,index) in datas" :key="index">
+          <div style="float:left;width: 80px;height: 80px;"><img :src="store.state.img_path +item.picture" alt="头像"
+                                                                 style="width: 88px;border-radius: 45px;"></div>
+          <div style="float:left;width: 80%;margin-left: 20px;">
+            <div>{{ item.nickname }}</div>
+            <div style="float:left;">
+              <Rate allow-half v-model="item.store_score" disabled/>
             </div>
-          </Space>
+            <div style="line-height: 33px">
+              <span style="padding-left: 15px">口味:&nbsp;{{ item.score_kw }}</span>
+              <span style="padding-left: 15px">环境:&nbsp;{{ item.score_hj }}</span>
+              <span style="padding-left: 15px">服务:&nbsp;{{ item.score_fw }}</span>
+            </div>
+            <div id="text" style="white-space: pre-line;">{{ item.text }}</div>
+            <!--                <div id="pic" >-->
+            <!--                  <div v-for="it in item.pics" style="display: inline-block;"><img :src="store.state.img_path+it" alt="11"></div>-->
+            <!--                </div>-->
 
-          <div style="margin-top: 10px;">{{ item.create_time }}
-            <div style="display: inline-block;float:right;">
-              <a style="text-align: center" @click="like(item.user_id,index)">
-                <like theme="outline" size="24" fill="#4a90e2"/>
-                {{ item.likes }}&nbsp;点赞</a>
+            <Space wrap style="margin-top: 10px;">
+              <div v-for="(url, index) in item.pics" :key="url">
+                <Image :src="url" fit="contain" width="120px" height="80px" preview
+                       :preview-list="item.pics" :initial-index="index"/>
+              </div>
+            </Space>
+
+            <div style="margin-top: 10px;">{{ item.create_time }}
+              <div style="display: inline-block;float:right;">
+                <a style="text-align: center" @click="like(item,index)">
+                  <like theme="outline" size="24" fill="#4a90e2"/>
+                  {{ item.likes }}&nbsp;点赞</a>
+              </div>
             </div>
           </div>
-        </div>
 
-      </GridItem>
-    </Grid>
+        </GridItem>
+      </Grid>
+    </div>
   </div>
 </template>
 
@@ -84,15 +87,15 @@ export default {
           })
     },
     //   点赞
-    like(id, index) {
+    like(item, index) {
       if (this.store.state.user === '') {
         this.$Message.warning("未登录")
         return
       }
+      console.log(item)
       this.axios.post('/comments/like', {
         user_id: this.store.state.user.id,
-        like_user_id: id,
-        shop_id: this.$route.params.id
+        comment_id: item.id,
       }).then((res) => {
         if (res.data.success === false) {
 

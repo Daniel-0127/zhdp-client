@@ -1,7 +1,7 @@
 <template>
 
-    <div style="width: 40%;height:572px;margin:30px  auto">
-      <p style="font-size: 23px;margin-bottom: 20px;margin-left: -100px;" >修改信息：</p>
+    <div style="width: 50%;height:572px;margin:30px  auto">
+      <p style="font-size: 23px;margin-bottom: 20px;margin-left: -100px;font-weight: bolder" >修改信息：</p>
       <Form :model="formItem" :label-width="80">
         <FormItem label="昵称">
           <Input v-model="formItem.nickname" :placeholder="store.state.user.nickname"/>

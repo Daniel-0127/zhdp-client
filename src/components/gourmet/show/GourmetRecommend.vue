@@ -1,6 +1,6 @@
 <!--推荐店铺-->
 <template>
-  <div id="body">
+  <div id="body" v-show="li.length > 0">
     <p>推荐店铺</p>
     <div id="center">
       <Grid :col="1" :hover="true" style=" background-color: #fff;">
@@ -10,7 +10,7 @@
             <div>
               <div style="float:left;padding-right: 12px;margin-top: 6px">
                 <Rate show-text allow-half disabled v-model="item.star_shop">
-                  <span style="color: #f5a623">{{item.star_shop }}</span>
+                  <span style="color: #f5a623">{{ item.star_shop }}</span>
                 </Rate>
               </div>
               <div style="padding-top: 5px;">
@@ -42,6 +42,7 @@ import {
   Grid, GridItem, Rate
 } from 'view-ui-plus'
 import store from '@/store'
+
 export default {
   name: 'GourmetRecommend',
   components: {
@@ -51,33 +52,38 @@ export default {
   },
   data() {
     return {
-      li: [{}]
+      li: []
     }
   },
   methods: {
     getShops() {
-        this.axios.get('/shop/recommend1', { params: { user_id: store.state.user.id } })
-            .then((res) => {
-              console.log(res.data.data)
+      this.axios.get('/shop/recommend1', {params: {user_id: store.state.user.id}})
+          .then((res) => {
+            console.log(res.data.data)
+            if (res.data.data.length > 5) {
+              this.li = res.data.data.slice(0, 5);
+            } else {
               this.li = res.data.data
-              this.li.forEach(item => {
-                item.star_shop=((Number(item.star_kw) + Number(item.star_fw) + Number(item.star_hj))/3.0).toFixed(2)
-              })
+            }
+
+            this.li.forEach(item => {
+              item.star_shop = Number(((item.star_kw + item.star_fw + item.star_hj) / 3).toFixed(2))
             })
+          })
 
 
     },
     toShop(id) {
-      this.$router.push({ path: `/gourmet/shop/${id}` })
+      this.$router.push({path: `/gourmet/shop/${id}`})
     }
   },
   created() {
     //防止用户登录后没有数据
     setTimeout(() => {
-      if(store.state.user!==''){
+      if (store.state.user !== '') {
         this.getShops()
       }
-    },  150)
+    }, 350)
 
 
   }
@@ -87,7 +93,7 @@ export default {
 <style scoped>
 #body {
   width: 80%;
-  margin: 0  auto;
+  margin: 20px auto;
 }
 
 p {
@@ -101,14 +107,16 @@ p {
   margin: 0 25px 25px 0;
 }
 
-#center .span{
+#center .span {
   line-height: 38px;
 }
-#center .span:nth-child(odd){
+
+#center .span:nth-child(odd) {
   padding-right: 10px;
   border-right: #c0bbbb 1px solid;
 }
-#center .span:nth-child(even){
+
+#center .span:nth-child(even) {
   padding-left: 10px;
 
 }

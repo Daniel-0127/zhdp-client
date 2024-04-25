@@ -2,9 +2,11 @@
   <div id="body">
     <div style="margin: 0 190px;padding-top: 10px">
       <div class="div1">
-        <img :src="img" alt="图标" style="width: 45px;height: 45px;float:left;">
-<!--        <p id="title">Smart Review</p>-->
-        <p id="title">智慧点评</p>
+        <a href="javascript:void(0)" @click="onMain()">
+          <img :src="img" alt="图标" style="width: 45px;height: 45px;float:left;">
+          <!--        <p id="title">Smart Review</p>-->
+          <p id="title">智慧点评</p>
+        </a>
       </div>
       <div class="div2">
 
@@ -20,22 +22,22 @@
           </div>
         </router-link>
         <router-link to="/my/collect">
-        <div>
-          <Icon type="md-heart-outline" size="22" fill="#333"/>
-          <p>收藏</p>
-        </div>
+          <div>
+            <Icon type="md-heart-outline" size="22" fill="#333"/>
+            <p>收藏</p>
+          </div>
         </router-link>
         <router-link to="/my/message">
-        <div>
-          <Icon type="md-notifications-outline" size="22" fill="#333"/>
-          <p>消息</p>
-        </div>
+          <div>
+            <Icon type="md-notifications-outline" size="22" fill="#333"/>
+            <p>消息</p>
+          </div>
         </router-link>
         <router-link to="/my/info">
-        <div>
-          <Icon type="md-person" size="22" fill="#333"/>
-          <p>个人中心</p>
-        </div>
+          <div>
+            <Icon type="md-person" size="22" fill="#333"/>
+            <p>个人中心</p>
+          </div>
         </router-link>
         <div @click="login" v-if="store.state.user === ''">
           <Button type="primary"
@@ -57,22 +59,22 @@
           </Dropdown>
         </div>
       </div>
-<!--      <div id="div4">-->
-<!--        <Menu mode="horizontal" theme="light" active-name="美食">-->
-<!--          <MenuItem name="美食" to="/gourmet">-->
-<!--            美食-->
-<!--          </MenuItem>-->
-<!--          <MenuItem name="酒店" to="/hotel">-->
-<!--            酒店-->
-<!--          </MenuItem>-->
-<!--          <MenuItem name="休闲娱乐" to="/recreation">-->
-<!--            休闲娱乐-->
-<!--          </MenuItem>-->
-<!--          <MenuItem name="旅游" to="/travel">-->
-<!--            旅游-->
-<!--          </MenuItem>-->
-<!--        </Menu>-->
-<!--      </div>-->
+      <!--      <div id="div4">-->
+      <!--        <Menu mode="horizontal" theme="light" active-name="美食">-->
+      <!--          <MenuItem name="美食" to="/gourmet">-->
+      <!--            美食-->
+      <!--          </MenuItem>-->
+      <!--          <MenuItem name="酒店" to="/hotel">-->
+      <!--            酒店-->
+      <!--          </MenuItem>-->
+      <!--          <MenuItem name="休闲娱乐" to="/recreation">-->
+      <!--            休闲娱乐-->
+      <!--          </MenuItem>-->
+      <!--          <MenuItem name="旅游" to="/travel">-->
+      <!--            旅游-->
+      <!--          </MenuItem>-->
+      <!--        </Menu>-->
+      <!--      </div>-->
       <HomeLogin ref="login"></HomeLogin>
 
     </div>
@@ -136,8 +138,8 @@ export default {
       this.axios.post('/user/lagOut').then((res) => {
         console.log(res)
         this.$Message.success(res.data.data)
-        this.store.commit('updateUser', '')
-        this.store.commit('updateToken', '')
+        this.$store.commit('updateUser', '')
+        this.$store.commit('updateToken', '')
       })
     },
     // 搜索
@@ -145,10 +147,20 @@ export default {
       this.axios.get('/shop/search', {params: {se: this.search}}).then((res) => {
         //TODO 展示
         console.log(res)
-        this.store.commit('updateSearch',res.data.data)
+        this.store.commit('updateSearch', res.data.data)
+        if (this.store.state.search.length < 1) {
+          this.$Message.warning("查询数据为空！");
+        } else {
+          this.$Message.success("查询成功！");
+        }
       })
     },
+    onMain() {
+      this.$router.push('/gourmet/show');
+    },
   },
+
+
   created() {
     this.isLogin()
   }
@@ -156,9 +168,10 @@ export default {
 </script>
 
 <style scoped>
-a:visited{
+a:visited {
   /*color: #5b5656;*/
 }
+
 #body {
   width: 100%;
   height: 70px;

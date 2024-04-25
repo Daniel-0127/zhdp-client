@@ -99,10 +99,10 @@
         <ul style="display:table;height:124px;">
           <li style="list-style: none;height: 125px;width:175px;float:left;" v-for="(item,index) in dish" :key="index">
             <a href="javaScript:void(0);" class="dish">
-              <img :src="item.img" alt="" style="width: 140px;height: 90px;padding:3px;">
+              <img :src="store.state.img_path+item.img" alt="" style="width: 140px;height: 90px;padding:3px;">
               <div>
                 <span style="font-size: 13px;margin-left: 3px">{{ item.name }}</span>
-                <span style="float:right;margin-right: 3px">{{item.price}}</span>
+                <span style="float:right;margin-right: 3px">{{ item.price }}</span>
               </div>
             </a>
           </li>
@@ -112,7 +112,7 @@
     <br>
 
     <!--    促销-->
-    <div style="margin-top: 20px;padding:12px 0 12px 18px">
+    <div v-show="voucher.length > 0" style="margin-top: 20px;padding:12px 0 12px 18px">
       <p style="font-size: 21px;font-weight: bolder">优惠促销</p>
       <Grid :col="1" style=" background-color: #fff;">
         <GridItem v-for="(item, index) in voucher" :key="index">
@@ -129,10 +129,7 @@
       </Grid>
     </div>
     <!--        评论-->
-    <div style="margin-top: 20px;padding:12px 0 12px 18px">
-      <p style="font-size: 21px;font-weight: bolder">评论区</p>
-      <GourmetComments></GourmetComments>
-    </div>
+    <GourmetComments></GourmetComments>
     <!--    我要评论-->
     <div style="margin-top: 20px;padding:12px 0 12px 18px" id="myComments">
       <p style="font-size: 21px;font-weight: bolder">我要评价</p>
@@ -193,7 +190,7 @@
 import {
   Grid, GridItem, Icon, Rate, Input, Button, Upload, Image, Modal
 } from 'view-ui-plus'
-import {ShareTwo, Star, Caution, LocalTwo, FullScreen, OffScreen,Left} from '@icon-park/vue-next'
+import {ShareTwo, Star, Caution, LocalTwo, FullScreen, OffScreen, Left} from '@icon-park/vue-next'
 import axios from 'axios'
 import store from '@/store'
 import MyMap from "@/components/MyMap.vue";
@@ -202,6 +199,11 @@ import GourmetComments from "@/components/gourmet/shop/GourmetComments.vue";
 
 export default {
   name: 'GourmetShop',
+  computed: {
+    store() {
+      return store
+    }
+  },
   components: {
     GourmetComments,
     GourmetCoupon,
@@ -356,12 +358,13 @@ export default {
         console.log(res)
         if (res.data.success) {
           this.$Message.success('发布成功！')
-          this.mydata = {
-            kw: 0,
-            fw: 0,
-            hj: 0,
-            text: '',
-          }
+          // this.mydata = {
+          //   kw: 0,
+          //   fw: 0,
+          //   hj: 0,
+          //   text: '',
+          // }
+          this.$router.push({path: '/MyEmpty', query: {path_: '/gourmet/shop/' + this.$route.params.id}})
           this.files = []
         } else {
           this.$Message.error(res.data.data)
@@ -385,7 +388,7 @@ export default {
       })
     },
     //返回主页
-    onBack(){
+    onBack() {
       this.$router.push('../')
     },
   },
@@ -433,12 +436,13 @@ export default {
 #myComments > div {
   margin-top: 10px;
 }
-.dish{
+
+.dish {
   display: table;
   border: 2px solid #ebebeb;
 }
 
-.dish:hover{
+.dish:hover {
   border: 2px solid #fa5e00;
 }
 

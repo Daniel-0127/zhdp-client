@@ -33,7 +33,7 @@
       </Grid>
     </div>
     <div id="ye">
-      <Page v-model="page" :total="total" show-elevator  @on-change="getShops"/>
+      <Page v-model="page" :page-size="10" :total="total" show-elevator  @on-change="getShops"/>
     </div>
 
   </div>
@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       page: 1,
-      total: 10,
+      total: 102,
       li: []
     }
   },
@@ -69,7 +69,7 @@ export default {
           this.li.forEach(item => {
             item.star_shop=Number(((item.star_kw + item.star_fw + item.star_hj)/3).toFixed(2))
           })
-          this.total = res.data.data.pages * 10
+          this.total = res.data.data.pages * 10 ;
         })
     },
     toShop(id) {
